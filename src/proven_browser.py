@@ -212,18 +212,19 @@ class ProvenBrowser:
             parsed = urlparse(website_url)
             base_domain = parsed.netloc or 'www.capcut.com'
             default_cookie_domain = '.' + base_domain.lstrip('.')
+            user_agent = session_data.get('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
 
             # Create context
             self.context = self.browser.new_context(
                 viewport={'width': 1280, 'height': 720},
-                user_agent=session_data.get('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+                user_agent=user_agent
             )
             
             # Load cookies from session data
             if 'cookies' in session_data:
                 print("🍪 Loading cookies from proven session...")
                 
-                # Go to target website first so domain is correct (works for TikTok, YouTube, etc.)
+                # Go to target website first so domain is correct (works for any site)
                 page = self.context.new_page()
                 page.goto(website_url)
                 time.sleep(2)
@@ -482,7 +483,7 @@ class ProvenBrowser:
         
         return False
     
-    def create_selenium_driver_with_session(self) -> Optional[webdriver.Chrome]:
+    def create_selenium_driver_with_session(self) -> Optional[Any]:
         """
         Create Selenium driver with proven session (for advanced use cases).
         
